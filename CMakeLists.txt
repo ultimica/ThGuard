@@ -15,14 +15,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5Core)
 
 add_subdirectory(thread_guard)
-#add_subdirectory(Data)
+add_subdirectory(data)
 
 add_executable(ThGuard
   main.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
-                    PUBLIC ${PROJECT_SOURCE_DIR}/thread_guard
+                    PUBLIC ${PROJECT_SOURCE_DIR}/thread_guard ${PROJECT_SOURCE_DIR}/data
                     )
 
-target_link_libraries(ThGuard Qt5::Core)
+
+target_link_libraries(ThGuard Qt5::Core data)

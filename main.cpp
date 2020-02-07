@@ -2,16 +2,33 @@
 
 #include<iostream>
 #include "thread_guard.hpp"
+#include "dummy_dcc.h"
 
+///This is thread guarded method
 //#define GETDCCTASKPTR(INPUT) INPUT.GetEnc().GetData().task_ptr_
+
+///This is un-guarded method
 #define GETDCCTASKPTR(INPUT) INPUT.data_.task_ptr_
+
+
+
+struct Utilizer
+{
+    Encaptor<DumyDCC> GetEnc()
+    {
+        return Encaptor<DumyDCC>(&data_);
+    }
+
+    DumyDCC data_;
+};
+
 
 struct ThreadFun
 {
 
     void RunTh1(Utilizer &input)
     {
-        th1_=std::make_unique<std::thread>([&input](){
+            th1_=std::make_unique<std::thread>([&input](){
             for(int i=0;i<100;i++)
             {
                 GETDCCTASKPTR(input)->TaskAdd(5);
