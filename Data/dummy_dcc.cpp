@@ -8,6 +8,7 @@ void DccTask::TaskAdd(unsigned int const loop)
     for(unsigned int i=0;i!=loop;++i)
     {
         ++x_;
+        std::cout<<"Operation  +++++    ";
         PrintX();
     }
 }
@@ -17,6 +18,7 @@ void DccTask::TaskMinus(unsigned int const loop)
     for(unsigned int i=0;i!=loop;++i)
     {
         --x_;
+        std::cout<<"Operation  -------    ";
         PrintX();
     }
 }

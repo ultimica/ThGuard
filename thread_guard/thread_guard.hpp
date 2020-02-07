@@ -43,12 +43,6 @@ template<typename EncDataType>
 std::recursive_mutex Encaptor<EncDataType>::recursive_mutex_;
 
 
-
-#define GETSETVAR(Type,var) Type &Get() \
-                        {       \
-                            return gobj.GetEnc().GetData()->var;    \
-                        }
-
-
+#define GET_ENC_DATA_MEMBER_VAR(EncaptorObj, var) EncaptorObj.GetEnc().GetData().var
 
 #endif
