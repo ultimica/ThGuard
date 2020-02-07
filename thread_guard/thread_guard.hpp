@@ -5,6 +5,7 @@
 #include<mutex>
 #include<thread>
 #include<iostream>
+#include <memory>
 
 template<typename EncDataType>
 struct Encaptor
@@ -41,11 +42,46 @@ struct Encaptor
 template<typename EncDataType>
 std::recursive_mutex Encaptor<EncDataType>::recursive_mutex_;
 
-struct DataEncapulator
-{
+/////////////////////////////////////////////////////
+//////////////////////////  Dummy Dcc & Dcc Task
+//////////////////////////
+//////////////////////////
 
+struct DccTask
+{
+    void TaskAdd(unsigned int const loop)
+    {
+        for(int i=0;i!=loop;++i)
+        {
+            ++x_;
+            PrintX();
+        }
+    }
+
+    void TaskMinus(unsigned int const loop)
+    {
+        for(int i=0;i!=loop;++i)
+        {
+            --x_;
+            PrintX();
+        }
+    }
+
+    void PrintX()
+    {
+        std::cout<<"X Value=>"<<x_<<"\tPrint Thread=>"<<std::this_thread::get_id()<<std::endl;
+    }
+    int  x_{0};
+};
+struct DumyDCC
+{
+    void fun()
+    {
+        std::cout<<"AAAAADKDKDKDKDD=>"<<std::endl;
+    }
 int _x{100};
 int *_ptr_x;
+std::unique_ptr<DccTask>  task_ptr_{std::make_unique<DccTask>()};
 };
 
 #define GETSETVAR(Type,var) Type &Get() \
@@ -55,13 +91,14 @@ int *_ptr_x;
 
 struct Utilizer
 {
-    Encaptor<DataEncapulator> GetEnc()
+    Encaptor<DumyDCC> GetEnc()
     {
-        return Encaptor<DataEncapulator>(&data_);
+        return Encaptor<DumyDCC>(&data_);
     }
 
-    DataEncapulator data_;
+    DumyDCC data_;
 };
+
 
 
 #endif
