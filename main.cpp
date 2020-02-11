@@ -3,7 +3,6 @@
 #include <iostream>
 #include <functional>
 #include <vector>
-
 #include "thread_guard.hpp"
 #include "dummy_dcc.h"
 
@@ -59,9 +58,11 @@ struct ThreadFun
             th_vec_.emplace_back(std::make_unique<PressureTest>());
     }
 
+    ///////////////////////////////////////////////////////////////
+    ////Simple Thread Using~~
     void RunTh1(Utilizer &input)
     {
-            th1_=std::make_unique<std::thread>([&input](){
+        th1_=std::make_unique<std::thread>([&input](){
             for(unsigned int i=0;i<100;i++)
             {
                // GETDCCTASKPTR(input)->TaskAdd(10);
@@ -74,7 +75,7 @@ struct ThreadFun
 
     void RunTh2(Utilizer &input)
     {
-            th2_=std::make_unique<std::thread>([&input](){
+        th2_=std::make_unique<std::thread>([&input](){
             for(unsigned int i=0;i<100;i++)
             {
                // GETDCCTASKPTR(input)->TaskMinus(10);
@@ -84,7 +85,11 @@ struct ThreadFun
             }
         });
     }
-    
+    std::unique_ptr<std::thread> th1_;
+    std::unique_ptr<std::thread> th2_;
+
+    ///////////////////////////////////////////////////////////////
+    ////Thread Pool Using~~
     void RunThreadPool(Utilizer &input)
     {
         bool isAdd=true;
@@ -112,8 +117,6 @@ struct ThreadFun
         
     }
 
-    std::unique_ptr<std::thread> th1_;
-    std::unique_ptr<std::thread> th2_;
     std::vector<std::unique_ptr<PressureTest>>   th_vec_;
 };
 
@@ -126,5 +129,11 @@ int main(int argc, char *argv[])
     // thfun.RunTh1(g_util);
     // thfun.RunTh2(g_util);
     thfun.RunThreadPool(g_util);
+
+    while(1)
+    {
+        GETDCCTASKPTR(g_util)->TaskMinus(3);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
     return a.exec();
 }
